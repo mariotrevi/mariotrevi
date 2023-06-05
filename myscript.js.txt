@@ -1,0 +1,152 @@
+let indexp2 = Array(400).fill(0);
+let msatp2 = Array(61).fill(0);
+
+indexp2[1] = 1;
+indexp2[2] = 2;
+indexp2[3] = 3;
+
+function populateArrays() {
+    let driver = 1;
+    let cumulative = 0;
+    let p = 1;
+
+    for (let i = 1; i <= 60; i++) {
+        let parity = driver % 2;
+
+        if (parity === 1) {
+            cumulative += p;
+        }
+
+        msatp2[i] = cumulative;
+
+        p = p * 2;
+
+        if (driver % 2 === 0) {
+            driver = (driver * 3) / 2;
+        } else {
+            driver = (3 * (driver + 1)) / 2;
+        }
+    }
+
+    for (let i = 4; i < 400; i++) {
+        indexp2[i] = (indexp2[i - 1] * 3 + indexp2[i - 1] % 2) / 2;
+    }
+}
+
+populateArrays();
+
+function ms(n) {
+    let oddpart = n;
+    let expo = 0;
+    while (oddpart % 2 === 0) {
+        oddpart = oddpart / 2;
+        expo++;
+    }
+
+    let ispow2 = oddpart === 1 ? 1 : 0;
+
+    if (ispow2 === 1 || n === 6) {
+        if (n === 6) return 1;
+        if (n === 1) return 3;
+        if (n > 1) return msatp2[expo];
+    } else {
+        let p2 = 1;
+        while ((2 * p2) < n) {
+            p2 = 2 * p2;
+        }
+
+        let precursor = n - p2;
+        let output = ms(precursor);
+        if (is_on_list(2 * p2 - 1 - n) || (2 * p2 - 1 - n) === 0) {
+            output = output + p2;
+        }
+
+        return output;
+    }
+}
+
+function is_on_list(n) {
+    if (n === 0 || n % 2 === 1) return 0;
+
+    let oddpart = n;
+    let expo = 0;
+    while (oddpart % 2 === 0) {
+        oddpart = oddpart / 2;
+        expo++;
+    }
+
+    let ispow2 = oddpart === 1 ? 1 : 0;
+
+    if (ispow2 === 1) return 1;
+
+    let p2 = 1;
+    while ((2 * p2) < n) {
+        p2 = 2 * p2;
+    }
+
+    let precursor = n - p2;
+    return is_on_list_even_index(precursor);
+}
+
+function is_on_list_even_index(n) {
+    let oddpart = n;
+    let expo = 0;
+
+    while (oddpart % 2 === 0) {
+        oddpart = oddpart / 2;
+        expo++;
+    }
+
+    let ispow2 = oddpart === 1 ? 1 : 0;
+
+    if (ispow2 === 1) {
+        let position = indexp2[expo];
+        if (position % 2 === 1) return 0;
+        return 1;
+    } else {
+        let p2 = 1;
+        expo = 0;
+        while ((2 * p2) < n) {
+            p2 = 2 * p2;
+            expo++;
+        }
+
+        let precursor = n - p2;
+
+        if (is_on_list(precursor)) {
+            let index = calculate_index(precursor);
+            if (index % 2 === 0) {
+                if (indexp2[expo] % 2 === (index / 2) % 2) return 1;
+                return 0;
+            }
+            return 0;
+        }
+        return 0;
+    }
+}
+
+function calculate_index(n) {
+    let oddpart = n;
+    let expo = 0;
+
+    while (oddpart % 2 === 0) {
+        oddpart = oddpart / 2;
+        expo++;
+    }
+
+    let ispow2 = oddpart === 1 ? 1 : 0;
+
+    if (ispow2 === 1) return indexp2[expo];
+
+    let p2 = 1;
+    expo = 0;
+    while ((2 * p2) < n) {
+        p2 = 2 * p2;
+        expo++;
+    }
+
+    let precursor = n - p2;
+    let index = indexp2[expo] + calculate_index(precursor) / 2;
+
+    return index;
+}

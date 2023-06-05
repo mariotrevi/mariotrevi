@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
+
+</head>
+
+
+
+
+
+
+
+
+<body>
+    Start: <input type="number" id="start"><br>
+    End: <input type="number" id="end"><br>
+    Y Axis: <select id="yType">
+        <option value="">Linear</option>
+        <option value="log">Logarithmic</option>
+    </select><br>
+    <button onclick="plotGraph()">Plot</button>
+    <div id="myDiv"></div>
+
+
+
+
+
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script>
         // Your recursive ms function goes here.
@@ -208,15 +234,10 @@ function calculate_index(n) {
             Plotly.newPlot('myDiv', data, layout);
         }
     </script>
-</head>
-<body>
-    Start: <input type="number" id="start"><br>
-    End: <input type="number" id="end"><br>
-    Y Axis: <select id="yType">
-        <option value="">Linear</option>
-        <option value="log">Logarithmic</option>
-    </select><br>
-    <button onclick="plotGraph()">Plot</button>
-    <div id="myDiv"></div>
+
+
+
+
+
 </body>
 </html>
